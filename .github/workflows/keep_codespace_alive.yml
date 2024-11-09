@@ -2,7 +2,7 @@ name: Keep Codespace Alive
 
 on:
   schedule:
-    - cron: "*/25 * * * *"
+    - cron: "*/5 * * * *" # Alle 25 Minuten ausführen
   workflow_dispatch:
 
 jobs:
@@ -19,11 +19,11 @@ jobs:
           git config --global user.email "bennofromme@gmail.com"
           git config --global user.name "BigB132"
 
-      - name: Erstelle Dummy-Datei
+      - name: Erstelle Dummy-Datei und committe bei Änderungen
         run: |
           touch dummyfile
-          git add .
-          git commit -m "Keep codespace alive"
-
+          git add dummyfile
+          git diff-index --quiet HEAD || git commit -m "Keep codespace alive"
+          git push
       - name: Push Änderungen
         run: git push
